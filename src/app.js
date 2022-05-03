@@ -3,14 +3,6 @@ import React, { useEffect, useState } from "react";
 //imdbAPI 65f90792
 const API_URL = 'https://www.omdbapi.com?apikey=65f90792';
 
-const MovieCards =(props) => {
-    return (
-        <>
-            {props.search.map(item => <MovieCard movieName={item.Title} key={item.imdbID} poster={item.Poster}/>)}
-        </>
-    );
-}
-
 const MovieCard = (props) => {
     return (
         <div className="col-md-3 col-xs-8 py-3">
@@ -61,7 +53,7 @@ const App = () => {
                 >Search</button>
             </div>
             <div className="row">
-                <MovieCards search={searchResult}/>
+                {searchResult.map(item => <MovieCard movieName={item.Title} key={item.imdbID} poster={item.Poster}/>)}
             </div>
         </div>
     );
