@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 //imdbAPI 65f90792
 const API_URL = 'https://www.omdbapi.com?apikey=65f90792';
@@ -25,18 +25,21 @@ const App = () => {
     const [searchTitle, setSearchTitle] = useState('spiderman');
     const [searchResult, setSearchResult] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
-    const searchMovie = async (searchTitle) => {
-        setIsLoading(true);
-        const response = await fetch(`${API_URL}&s=${searchTitle}}`);
-        const data = await response.json();
-        setSearchResult(data.Search);
-        setIsLoading(false);
-    }
+ 
+    const fetchData = useCallback(() => {
+        const fetchMovieData = async () => {
+            setIsLoading(true);
+                const response = await fetch(`${API_URL}&s=${searchTitle}}`);
+                const data = await response.json();
+                setSearchResult(data.Search);
+            setIsLoading(false);
+        }
+        fetchMovieData();
+    }, [searchTitle]);
 
     useEffect(() => {
-        searchMovie(searchTitle);
-    }, [searchTitle]);
+        fetchData();
+    }, [searchTitle, fetchData]);
 
     return (
         <div className="container text-center py-3">
@@ -51,7 +54,7 @@ const App = () => {
                 />
                 <button 
                     className="btn btn-default btn-outline-primary col-2"
-                    onClick={() => searchMovie(searchTitle)}
+                    onClick={() => fetchData()}
                 >Search</button>
             </div>
             <div className="row">
