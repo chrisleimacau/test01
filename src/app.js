@@ -22,19 +22,21 @@ const MovieCard = (props) => {
 
 const App = () => {
 
-    const [searchTitle, setSearchTitle] = useState('');
+    const [searchTitle, setSearchTitle] = useState('spiderman');
     const [searchResult, setSearchResult] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const searchMovie = async (searchTitle) => {
+        setIsLoading(true);
         const response = await fetch(`${API_URL}&s=${searchTitle}}`);
         const data = await response.json();
-        //console.log(data.Search);
         setSearchResult(data.Search);
+        setIsLoading(false);
     }
 
     useEffect(() => {
-        searchMovie('spiderman');
-    }, []);
+        searchMovie(searchTitle);
+    }, [searchTitle]);
 
     return (
         <div className="container text-center py-3">
@@ -53,7 +55,10 @@ const App = () => {
                 >Search</button>
             </div>
             <div className="row">
-                {searchResult.map(item => <MovieCard movieName={item.Title} key={item.imdbID} poster={item.Poster}/>)}
+                { isLoading 
+                    ? <div>Loading...</div>
+                    : searchResult != null && searchResult.map(item => <MovieCard movieName={item.Title} key={item.imdbID} poster={item.Poster}/>)
+                }
             </div>
         </div>
     );
