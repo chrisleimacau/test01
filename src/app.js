@@ -1,20 +1,58 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 
 //imdbAPI 65f90792
-const API_URL = 'https://www.omdbapi.com?apikey=65f90792';
+//const API_URL = 'https://www.omdbapi.com?apikey=65f90792';
+const API_URL = 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardlist/';
+//BP01/bp01_128.png
 
-const MovieCard = (props) => {
+const wishlist = [
+    'BP01/bp01_026.png',
+    'BP01/bp01_026.png',
+    'BP01/bp01_026.png',
+    'BP01/bp01_032.png',
+    'BP01/bp01_032.png',
+    'BP01/bp01_032.png',
+    'BP01/bp01_034.png',
+    'BP01/bp01_034.png',
+    'BP01/bp01_034.png',
+    'BP01/bp01_043.png',
+    'BP01/bp01_043.png',
+    'BP01/bp01_043.png',
+    'BP01/bp01_033.png',
+    'BP01/bp01_033.png',
+    'BP01/bp01_033.png',
+    'BP01/bp01_048.png',
+    'BP01/bp01_048.png',
+    'BP01/bp01_048.png',
+    'BP01/bp01_042.png',
+    'BP01/bp01_046.png',
+    'BP01/bp01_036.png',
+    'BP01/bp01_036.png',
+                ];
+
+const wishlist2 = [
+    'BP01/bp01_027.png',
+    'BP01/bp01_027.png',
+    'BP01/bp01_035.png',
+    'BP01/bp01_035.png',
+    'BP01/bp01_044.png',
+    'BP01/bp01_044.png',
+    'BP01/bp01_t06.png',
+    'BP01/bp01_t06.png',
+    'BP01/bp01_t04.png',
+    'BP01/bp01_t04.png',
+    'BP01/bp01_t04.png',
+    ];
+
+const Card = (props) => {
     return (
-        <div className="col-md-3 col-xs-8 py-3">
+        <div className="col-md-2 col-xs-3 py-3">
             <div className="card rounded text-center">
                 <img 
-                    src={props.poster}
+                    src={props.cardImage}
                     alt="This is the poster of movie"
                     className="card-image-top rounded"
                 />
-                <div className="card-body">
-                    {props.movieName}
-                </div>
             </div>
         </div>
     );
@@ -22,47 +60,24 @@ const MovieCard = (props) => {
 
 const App = () => {
 
-    const [searchTitle, setSearchTitle] = useState('spiderman');
-    const [searchResult, setSearchResult] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
- 
-    const fetchData = useCallback(() => {
-        const fetchMovieData = async () => {
-            setIsLoading(true);
-                const response = await fetch(`${API_URL}&s=${searchTitle}}`);
-                const data = await response.json();
-                setSearchResult(data.Search);
-            setIsLoading(false);
-        }
-        fetchMovieData();
-    }, [searchTitle]);
-
-    useEffect(() => {
-        fetchData();
-    }, [searchTitle, fetchData]);
-
     return (
         <div className="container text-center py-3">
-            <h1>My Movie App</h1>
-            <div className="d-flex flex-wrap justify-content-center mb-3">
-                <input 
-                    className="col-md-10 col-sm-12"
-                    type="search" 
-                    placeholder="Search for movies"
-                    onChange={(e) => setSearchTitle(e.target.value)}
-                    value={searchTitle}
-                />
-                <button 
-                    className="btn btn-default btn-outline-primary col-2"
-                    onClick={() => fetchData()}
-                >Search</button>
-            </div>
+            <h1 className="py-3">Shadowverse Evolve card wishlist</h1>
             <div className="row">
-                { isLoading 
-                    ? <div>Loading...</div>
-                    : searchResult != null && searchResult.map(item => <MovieCard movieName={item.Title} key={item.imdbID} poster={item.Poster}/>)
-                }
-            </div>
+                <div className="col-md-2 border">
+                    <h2 className="pt-3">Search</h2>
+                </div>
+                <div className="col-md-10 border">
+                    <h2 className="pt-3">Deck</h2>
+                    <div className="row">
+                        {wishlist.map(item => <Card cardImage={`${API_URL}${item}`}/>)}
+                    </div>
+                    <hr/>
+                    <div className="row">
+                        {wishlist2.map(item => <Card cardImage={`${API_URL}${item}`}/>)}
+                    </div>
+                </div>
+            </div>  
         </div>
     );
 }
